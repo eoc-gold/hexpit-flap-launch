@@ -1,0 +1,1 @@
+{"name": "Charge", "description": "Move one toward target enemy. Deal 2 damage if adjacent", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/warrior-charge.webp", "attributes": [{"trait_type": "Class", "value": "Warrior"}, {"trait_type": "Rarity", "value": "Common"}]}

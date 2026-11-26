@@ -1,0 +1,1 @@
+{"name": "Lightning Trap", "description": "Place Trap. On trigger deal 4 damage. Deal 2 damage to each adjacent enemy", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/ranger-lightning-trap.webp", "attributes": [{"trait_type": "Class", "value": "Ranger"}, {"trait_type": "Rarity", "value": "Epic"}]}

@@ -1,0 +1,1 @@
+{"name": "Poison Cloud", "description": "Move one to target empty hex. Spawn three Clouds behind you until end of next turn. Add Poison Runes to each hit enemy draw pile", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/ranger-poison-cloud.webp", "attributes": [{"trait_type": "Class", "value": "Ranger"}, {"trait_type": "Rarity", "value": "Rare"}]}

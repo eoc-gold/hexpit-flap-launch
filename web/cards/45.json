@@ -1,0 +1,1 @@
+{"name": "Mortal Blow", "description": "Deal 2 damage. Target receives 2 less healing from all sources until end of next turn", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/warrior-mortal-blow.webp", "attributes": [{"trait_type": "Class", "value": "Warrior"}, {"trait_type": "Rarity", "value": "Common"}]}

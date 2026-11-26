@@ -1,0 +1,1 @@
+{"name": "Dragon Shot", "description": "Channel. Target adjacent hex. Deal 4 damage to each enemy in a straight line. Deal 5 instead if Weak", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/ranger-dragon-shot.webp", "attributes": [{"trait_type": "Class", "value": "Ranger"}, {"trait_type": "Rarity", "value": "Epic"}]}

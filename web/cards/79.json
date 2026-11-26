@@ -1,0 +1,1 @@
+{"name": "Cinderstorm", "description": "Channel. Target a hex. Deal 6 damage to the target hex and 2 to each adjacent enemy. Apply Burn", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/mage-cinderstorm.webp", "attributes": [{"trait_type": "Class", "value": "Mage"}, {"trait_type": "Rarity", "value": "Epic"}]}

@@ -1,0 +1,1 @@
+{"name": "Bull Rush", "description": "Channel. Target adjacent hex. Move up to three in a straight line. Deal 3 damage to all enemies in the way. Push", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/warrior-bull-rush.webp", "attributes": [{"trait_type": "Class", "value": "Warrior"}, {"trait_type": "Rarity", "value": "Rare"}]}

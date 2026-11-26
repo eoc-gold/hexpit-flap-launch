@@ -1,0 +1,1 @@
+{"name": "Volley Shot", "description": "Channel. Target a hex. Deal 2 damage to each enemy. Deal 4 instead if Weak. Apply Weak to each", "image": "https://eoc-gold.github.io/hexpit-flap-launch/art/ranger-volley-shot.webp", "attributes": [{"trait_type": "Class", "value": "Ranger"}, {"trait_type": "Rarity", "value": "Epic"}]}

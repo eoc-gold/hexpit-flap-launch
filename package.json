@@ -1,0 +1,5 @@
+{
+  "name":"hexpit-flap-launch","private":true,"version":"1.0.0","type":"module",
+  "scripts":{"build":"vite build web --target es2022 --base=./ --outDir ../dist && node scripts/copy-static.mjs","dev":"vite web","rehearse":"node scripts/round.mjs","live":"node scripts/round.mjs --testnet"},
+  "dependencies":{"viem":"2.55.2"},"devDependencies":{"vite":"6.4.1"}
+}

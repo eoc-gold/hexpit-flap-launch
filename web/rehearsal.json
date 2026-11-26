@@ -1,0 +1,226 @@
+{
+  "network": "Local fork of BSC testnet",
+  "chainId": 97,
+  "player": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+  "second": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+  "forkBlock": "145027709",
+  "steps": {
+    "factory": {
+      "hash": "0xecfcfdd1e8545d7a2f65e47cffede8963e3de010835f7c820d0043b728e787c9",
+      "block": "145027710"
+    },
+    "enable": {
+      "hash": "0xb08cb073868e60b18b6e9de987504f16da26ced54fab496adeb75673fa5ad4b9",
+      "block": "145027711"
+    },
+    "create": {
+      "hash": "0xc955178536ae0d607a78fb69bee0bbee884ae4af4459471c241b363b7b846d79",
+      "block": "145027712"
+    },
+    "faucet1": {
+      "hash": "0xaa431ef794fae4bb46aca335dbd4d2f56315359e3fc24a4ba99d7d88c8842acb",
+      "block": "145027713"
+    },
+    "approve1": {
+      "hash": "0x65d23126efc48bdfe3a1876f4b6946714ef6410694e70f4986a0edf65241de64",
+      "block": "145027714"
+    },
+    "open1": {
+      "hash": "0xd8bb84a7a74786568b06115f4234d4e86e982f51f7221b3cbdc1079c81fd370d",
+      "block": "145027715"
+    },
+    "faucet2": {
+      "hash": "0x47e3bf2d47b7d4c98c7e8d609e943285c443cb3d69d9a206c3b42bc4afe6b6f5",
+      "block": "145027716"
+    },
+    "approve2": {
+      "hash": "0xdc6ad8bbe3a407db7103a2aeb16c3306ad03526ea41adf4a83be28009f8fe19e",
+      "block": "145027717"
+    },
+    "openLast": {
+      "hash": "0x51de2b802ea25041528778b07ea2b369ca87f1f516b94c4c76746d403a36e496",
+      "block": "145027719"
+    },
+    "claim1": {
+      "hash": "0xf579fbbf349daace6b69a22b23cc32065c78f79f1b33232ffe7320f993413d9c",
+      "block": "145027720"
+    },
+    "claim2": {
+      "hash": "0x27395bcd9455cd336d4f1f22fc48eacef52bb81ecc4d84e1d2cd87a8f1a119d4",
+      "block": "145027721"
+    },
+    "openJudgeRound": {
+      "hash": "0xc9c8d2e07923973601cd3a538027ca0e0d97d897d6990385411e77106571fe41",
+      "block": "145027722"
+    }
+  },
+  "salt": "0x000000000000000000000000397c78d9f311bbfa1def15d7e03b0ff12e8e5725",
+  "predicted": "0x0fC9AC3A4EA907CA293036cBE489F5aB954B7777",
+  "reverted": [
+    {
+      "name": "openLast",
+      "hash": "0x4de8e63557770017f6d41f989b429c92cb9469bc2bc4d8ffec18eef1b6ecd1f0"
+    }
+  ],
+  "judgeSalt": "0x0000000000000000000000000e541ded90461d28db6924662dd67eb5353abc6d",
+  "factory": "0xe0d2a0819dbf4226a66a76b12799a5b714bd1f38",
+  "launcher": "0xB2A115b58e716bb384bb18b9D581605326aa9759",
+  "judgeLauncher": "0xA5F35c3AC5D96a9ca5B957a3322aAa6F42575d71",
+  "token": "0x0fC9AC3A4EA907CA293036cBE489F5aB954B7777",
+  "pool": "0xBa332d45f1B79ba20d6ffb1DCD84c4C716C07758",
+  "lpTotal": "5477225575051661134569",
+  "lpBurn": "5477225575051661133569",
+  "lpMinimum": "1000",
+  "quote": "0x190C989D5665a0e404B444b53CAE9AbCfb600157",
+  "poolStable": "60",
+  "poolGame": "500000",
+  "claimedGame": "500000",
+  "packs": [
+    {
+      "number": 1,
+      "cards": [
+        68,
+        4,
+        5,
+        10,
+        69
+      ],
+      "game": "76923.076923076923076923",
+      "player": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+    },
+    {
+      "number": 2,
+      "cards": [
+        72,
+        26,
+        15,
+        61,
+        67
+      ],
+      "game": "70512.820512820512820512",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 3,
+      "cards": [
+        54,
+        52,
+        42,
+        67,
+        83
+      ],
+      "game": "64102.564102564102564103",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 4,
+      "cards": [
+        10,
+        6,
+        67,
+        33,
+        69
+      ],
+      "game": "57692.307692307692307692",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 5,
+      "cards": [
+        1,
+        24,
+        71,
+        63,
+        50
+      ],
+      "game": "51282.051282051282051282",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 6,
+      "cards": [
+        8,
+        73,
+        30,
+        14,
+        48
+      ],
+      "game": "44871.794871794871794872",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 7,
+      "cards": [
+        74,
+        39,
+        5,
+        49,
+        50
+      ],
+      "game": "38461.538461538461538462",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 8,
+      "cards": [
+        41,
+        35,
+        59,
+        27,
+        47
+      ],
+      "game": "32051.282051282051282051",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 9,
+      "cards": [
+        86,
+        37,
+        3,
+        66,
+        95
+      ],
+      "game": "25641.025641025641025641",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 10,
+      "cards": [
+        43,
+        13,
+        73,
+        47,
+        47
+      ],
+      "game": "19230.769230769230769231",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 11,
+      "cards": [
+        57,
+        4,
+        55,
+        33,
+        64
+      ],
+      "game": "12820.51282051282051282",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    },
+    {
+      "number": 12,
+      "cards": [
+        44,
+        54,
+        20,
+        27,
+        56
+      ],
+      "game": "6410.256410256410256411",
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    }
+  ],
+  "status": "verified",
+  "recorded": "2026-11-26T18:35:20.902Z"
+}

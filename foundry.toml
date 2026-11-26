@@ -1,0 +1,9 @@
+[profile.default]
+src = "src"
+libs = ["lib"]
+auto_detect_remappings = false
+remappings = ["src/flap/=lib/flap/src/flap/", "flap/=lib/flap/src/flap/", "solady/=lib/flap/lib/solady/src/", "forge-std/=lib/flap/lib/forge-std/src/", "@openzeppelin/=lib/flap/lib/openzeppelin-contracts/contracts/", "@openzeppelin-contracts-upgradeable/=lib/flap/lib/openzeppelin-contracts-upgradeable/contracts/"]
+solc_version = "0.8.26"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200

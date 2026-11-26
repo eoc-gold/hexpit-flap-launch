@@ -1,0 +1,3 @@
+[submodule "lib/flap"]
+	path = lib/flap
+	url = https://github.com/flap-sh/FlapPoolLaunchVaultExample
