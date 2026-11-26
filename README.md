@@ -4,7 +4,7 @@ A five-card pack is also a contribution to a game's opening market. Players pay 
 
 [Open the judge demo](https://eoc-gold.github.io/hexpit-flap-launch/) · [Try a pack on BSC testnet](https://eoc-gold.github.io/hexpit-flap-launch/#wallet) · [Inspect the final mint](https://testnet.bscscan.com/tx/0xeaaef28b04d44b211df6736f33141fa0c108a7d39abed5dd21a617aa6da34774)
 
-[Watch the narrated 99-second demo](https://eoc-gold.github.io/hexpit-flap-launch/watch.html)
+[Watch the 66-second pack-opening film](https://eoc-gold.github.io/hexpit-flap-launch/watch.html)
 
 ## From DEXPit to a second studio game
 
