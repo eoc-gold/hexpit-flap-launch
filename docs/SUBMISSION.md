@@ -1,7 +1,9 @@
 # HackQuest submission copy
 
-**Project** · HexPit | The Founding Packs  
-**Team** · Engines of Creation  
+**Project** · DEXPit Founding Packs
+
+**Team** · Engines of Creation
+
 **Challenge** · BNB Bangkok 2026 / Flap Track / Build on Pool Launch
 
 **One line** · Each five-card pack funds a game's first stablecoin pool and gives its buyer a claim on a fixed GAME reserve.
@@ -12,7 +14,11 @@
 
 **What we built for Bangkok** · The BNB-specific launcher and factory, ERC-20 payment path, exact pack allocations, Flap launch and distribution, refunds, judge interface and template-based detail component. HexPit's game, card art and card catalog predate the event. The testnet demo uses block-derived card draws. Live gameplay entitlements and production randomness are future work.
 
+**Why Flap** · DEXPit proves the card-pack launch. The next test we propose to Flap is a second Engines of Creation title with its own catalog and sale rules. The studio can reuse its stablecoin collection, factory pattern and Flap settlement across games.
+
 **Reviewer links**
+
+- [Watch the narrated demo](https://eoc-gold.github.io/hexpit-flap-launch/watch.html)
 
 - [Interactive demo](https://eoc-gold.github.io/hexpit-flap-launch/)
 - [Source and reproduction instructions](https://github.com/eoc-gold/hexpit-flap-launch)

@@ -1,8 +1,14 @@
-# HexPit | The Founding Packs
+# DEXPit Founding Packs | Engines of Creation
 
 A five-card pack is also a contribution to a game's opening market. Players pay **5 faucet USD** and receive five on-chain HexPit cards. Pack twelve sends the entire **60 USD** raise into a Flap Pool Launch pair. The same transaction creates GAME, seeds the pool and funds the outstanding pack claims.
 
 [Open the judge demo](https://eoc-gold.github.io/hexpit-flap-launch/) · [Try a pack on BSC testnet](https://eoc-gold.github.io/hexpit-flap-launch/#wallet) · [Inspect the final mint](https://testnet.bscscan.com/tx/0xeaaef28b04d44b211df6736f33141fa0c108a7d39abed5dd21a617aa6da34774)
+
+[Watch the narrated 99-second demo](https://eoc-gold.github.io/hexpit-flap-launch/watch.html)
+
+## From DEXPit to a second studio game
+
+DEXPit is the card game. HexPit is the launcher prototype in this repository. A second Engines of Creation title could start with a character kit or gear bundle. Its designers would define the items and sale rules. Its engineers could adapt the catalog and launcher contract, run the refund and reserve tests, and reuse the factory pattern, Flap distribution callback and receipt interface. The current price, pack count, catalog and chain are fixed in code. A configurable studio-wide product is the next development step.
 
 ## Judge walkthrough
 
