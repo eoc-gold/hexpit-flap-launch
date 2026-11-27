@@ -6,7 +6,7 @@ import './fonts.css';
 const cardsBySlug = new Map(BUNDLED_CARDS.map(card => [card.id, card]));
 let opening;
 
-export function openPack({ ids, catalog, game, player, explorerUrl, replay }) {
+export function openPack({ ids, catalog, game, player, packNumber, poolOpened, explorerUrl, replay }) {
   const cards = ids.map(id => {
     const entry = catalog[Number(id) - 1];
     const card = cardsBySlug.get(entry.slug);
@@ -31,7 +31,7 @@ export function openPack({ ids, catalog, game, player, explorerUrl, replay }) {
       target: document.getElementById('pack-opening'),
       props: {
         cards,
-        receipt: { game, player, explorerUrl },
+        receipt: { game, player, packNumber, poolOpened, explorerUrl },
         replay,
         onclose: close,
         onagain: start

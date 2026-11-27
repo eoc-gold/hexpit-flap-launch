@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, tick } from 'svelte';
   import CloseButton from '$lib/components/CloseButton.svelte';
   import HexButton from '$lib/components/HexButton.svelte';
   import { modalFocus } from '$lib/actions/modalFocus';
@@ -24,10 +24,17 @@
   } from '$lib/economy/pack-opening';
   import PackAbilityBackdrop from './PackAbilityBackdrop.svelte';
   import PackBurst from './PackBurst.svelte';
+  import PoolFunding from './PoolFunding.svelte';
 
   interface Props {
     cards: PackOpeningCard[];
-    receipt: { game: string; player: string; explorerUrl?: string };
+    receipt: {
+      game: string;
+      player: string;
+      packNumber: number;
+      poolOpened: boolean;
+      explorerUrl?: string;
+    };
     replay: boolean;
     onclose: () => void;
     onagain: () => void;
@@ -37,7 +44,7 @@
   const formatGame = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format;
   const cardback = './pack-assets/textures/cardback-dexpit-official.png';
 
-  type Phase = 'sealed' | 'tear' | 'cards' | 'summary';
+  type Phase = 'sealed' | 'tear' | 'funding' | 'cards' | 'summary';
   let phase = $state<Phase>('sealed');
   let currentIndex = $state(0);
   let faceUp = $state(false);
@@ -48,6 +55,7 @@
   let burstOriginX = $state('50vw');
   let burstOriginY = $state('50vh');
   let packElement = $state<HTMLElement | null>(null);
+  let revealHeading = $state<HTMLHeadingElement>();
   let cardZoneElement = $state<HTMLElement | null>(null);
   let alive = true;
   const timers = new Set<number>();
@@ -195,9 +203,15 @@
     fireBurst('tear', packElement);
     await sleep(820);
     if (!alive) return;
-    phase = 'cards';
+    phase = 'funding';
     busy = false;
+  }
+
+  async function showCards() {
+    phase = 'cards';
     playSfx('ready');
+    await tick();
+    revealHeading?.focus({ preventScroll: true });
   }
 
   function playCardVoice(card: PackOpeningCard) {
@@ -299,7 +313,11 @@
   <header class="opening-head">
     <div>
       <p>{replay ? 'Pack receipt replay' : 'Mint confirmed'}</p>
-      <span>DEXPit · Flap Pool Launch</span>
+      <span>{phase === 'cards' || phase === 'summary'
+        ? receipt.poolOpened
+          ? 'GAME/USD pool opened'
+          : 'Pack ' + receipt.packNumber + ' of 12 · ' + (receipt.packNumber * 5) + ' / 60 test USD collected'
+        : 'DEXPit · Flap Pool Launch'}</span>
     </div>
     <CloseButton onClose={onclose} label="Close pack opening" />
   </header>
@@ -353,6 +371,8 @@
         </HexButton>
       </div>
     </section>
+  {:else if phase === 'funding'}
+    <PoolFunding packNumber={receipt.packNumber} poolOpened={receipt.poolOpened} oncontinue={showCards} />
   {:else if phase === 'cards' && current}
     <section
       class="reveal-stage"
@@ -361,7 +381,7 @@
     >
       <div class="reveal-copy" aria-live="polite" aria-atomic="true">
         <p class="eyebrow">Card {currentIndex + 1} of {cards.length}</p>
-        <h1 id="opening-title">{faceUp ? current.name : 'Your next pull is ready.'}</h1>
+        <h1 id="opening-title" tabindex="-1" bind:this={revealHeading}>{faceUp ? current.name : 'Your next pull is ready.'}</h1>
         {#if faceUp}
           <div class="pull-meta">
             <span class="rarity">{current.rarity}</span>

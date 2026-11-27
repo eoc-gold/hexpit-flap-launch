@@ -12,9 +12,18 @@ let index=0;
 const replayButton = el('replay-pack');
 const explorer = hash => 'https://testnet.bscscan.com/tx/' + hash;
 
-async function animatePack({ cards, game, player, hash }, replay) {
+async function animatePack({ cards, game, player, hash, number, poolOpened }, replay) {
   const { openPack } = await import('./pack-opening/index.js');
-  openPack({ ids: cards, catalog, game, player, explorerUrl: hash && explorer(hash), replay });
+  openPack({
+    ids: cards,
+    catalog,
+    game,
+    player,
+    packNumber: Number(number),
+    poolOpened,
+    explorerUrl: hash && explorer(hash),
+    replay
+  });
 }
 
 replayButton.onclick = async () => {
@@ -22,7 +31,7 @@ replayButton.onclick = async () => {
   const pack = data.packs[index];
   const hash = live ? data.steps[pack.number === 1 ? 'open1' : 'openLast'].hash : undefined;
   try {
-    await animatePack({ ...pack, hash }, true);
+    await animatePack({ ...pack, hash, poolOpened: pack.number === data.packs.length && Boolean(data.pool) }, true);
   } catch (error) {
     el('replay-error').textContent = 'Could not load the pack opening. Please reload and try again.';
     console.error(error);
@@ -84,10 +93,11 @@ async function transact(a,abi,fn,args){
     const logs = receipt.logs.filter(log => log.address.toLowerCase() === a.toLowerCase());
     const pack = parseEventLogs({ abi: launchAbi, eventName: 'PackOpened', logs })[0]?.args;
     if (pack) {
+      const poolOpened = parseEventLogs({ abi: launchAbi, eventName: 'PoolOpened', logs }).length > 0;
       const game = formatEther(pack.game);
       msg('Mint confirmed. '+pack.cards.map(id=>catalog[Number(id)-1].name).join(', ')+'. '+qty(game)+' GAME allocated. '+hash);
       try {
-        await animatePack({ ...pack, game, hash: local ? undefined : hash }, false);
+        await animatePack({ ...pack, game, poolOpened, hash: local ? undefined : hash }, false);
       } catch (error) {
         console.error('Could not load the pack opening for confirmed mint', hash, error);
       }
