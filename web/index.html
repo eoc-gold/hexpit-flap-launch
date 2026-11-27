@@ -3,12 +3,68 @@
 <meta name="theme-color" content="#100e13"><meta name="description" content="Open a five-card HexPit pack. Follow its stablecoin payment into a Flap pool on BNB Smart Chain testnet.">
 <title>DEXPit Founding Packs | Engines of Creation</title><link rel="stylesheet" href="./style.css"></head>
 <body><header><a class="brand" href="./">⬢ &nbsp; DEXPIT</a><nav><a href="#round">Launch round</a><a href="#evidence">Proof</a><a href="./watch.html">Film</a><a href="https://github.com/eoc-gold/hexpit-flap-launch">Source ↗</a></nav></header>
-<main><section class="hero"><div class="intro"><div class="overline">ENGINES OF CREATION &nbsp; / &nbsp; FLAP POOL LAUNCH</div><h1>The Founding<br><em>Packs</em></h1><p>Open five arena cards. Your 5 test USD goes into the first GAME pool. Every pack costs the same. The twelfth pack opens trading.</p><a class="cta" href="#round">Explore the round ↓</a></div>
+<main><section class="hero"><div class="intro"><div class="overline">ENGINES OF CREATION &nbsp; / &nbsp; FLAP POOL LAUNCH</div><h1>The Founding<br><em>Packs</em></h1><p>Open five arena cards. Your 5 test USD goes into the first GAME pool. Every pack costs the same. The twelfth pack opens trading.</p><a class="cta" href="#round">Open packs ↓</a></div>
 <div class="fan" aria-label="Three cards from the HexPit set"><img src="./art/mage-fireball.webp" alt="Fireball"><img src="./art/warrior-hexreaver.webp" alt="Hexreaver"><img src="./art/ranger-apex-predator.webp" alt="Apex Predator"></div></section>
-<section id="round"><div class="sectionhead"><div><div class="overline" id="mode">Loading launch record</div><h2>Pack opening</h2></div><div class="stepper"><button id="prev" aria-label="Previous pack">‹</button><span id="position"></span><button id="next" aria-label="Next pack">›</button></div></div>
-<div class="metrics"><div><small>USD collected</small><strong id="raised"></strong></div><div><small>This pack earned</small><strong id="earned"></strong></div><div><small>Pool status</small><strong id="phase"></strong></div></div>
-<div class="meter" aria-hidden="true"><i id="fill"></i></div><div id="cards" class="cards" aria-live="polite"></div>
-<div class="tools"><button id="replay-pack" disabled>Replay pack opening</button><button id="last">View final mint →</button><a id="record" href="./rehearsal.json">Download receipts ↗</a></div><p id="replay-error" role="status"></p></section>
+<section id="round">
+  <div class="launch-layout">
+    <div class="launch-content">
+      <div class="overline" id="mode">Loading launch record</div>
+      <h2>Pack opening</h2>
+      <div class="receipt-toolbar">
+        <div><small id="receipt-label">Cards</small><strong id="earned"></strong></div>
+        <div class="stepper"><button id="prev" aria-label="Previous pack" disabled>‹</button><span id="position">0 / 12</span><button id="next" aria-label="Next pack" disabled>›</button></div>
+      </div>
+      <div class="ignition-stage" id="replay-stage">
+        <div id="cards" class="cards pack-cards" aria-live="polite"></div>
+      </div>
+      <div class="pack-controls">
+        <button class="pack-primary" id="open-pack" disabled>Open a pack</button>
+        <div class="tools pack-options">
+          <span id="queue-status" role="status">Queue empty</span>
+          <button class="pack-secondary" id="clear-queue" disabled>Clear queue</button>
+          <button class="pack-secondary" id="reset-round" disabled>Restart replay</button>
+          <a href="#wallet">Mint with a wallet ↓</a>
+        </div>
+      </div>
+      <div class="tools receipt-links">
+        <button class="pack-secondary" id="replay-pack" disabled>Replay pack opening</button>
+        <button class="pack-secondary" id="last" disabled>View final mint →</button>
+        <a id="record" href="./rehearsal.json">Download receipts ↗</a>
+      </div>
+      <p id="replay-error" role="status"></p>
+    </div>
+    <aside id="replay-funding" class="funding-panel" aria-label="Replay pool funding"></aside>
+  </div>
+</section>
 <section id="evidence"><div class="overline">SETTLEMENT</div><h2>Where the mint went</h2><div class="split"><article><b>60 test USD + 500,000 GAME</b><p>The launcher passes the whole pack raise to Flap. The Portal creates the token, seeds its trading pair and burns the liquidity tokens.</p></article><article><b>500,000 GAME for players</b><p>The other half of supply funds pack claims. Earlier packs earn more GAME. Card rarity changes the hand you open and has no effect on the amount you can claim.</p></article></div><p id="proof"></p><div id="prooflinks" class="tools"></div></section>
-<section id="wallet"><div class="overline">BSC TESTNET · CHAIN 97</div><h2>Use a wallet</h2><p id="help"></p><div class="tools" id="actions"></div><output id="feedback" aria-live="polite"></output></section>
-<section><div class="overline">THE STUDIO</div><h2>From one game to the next</h2><div class="split"><article><b>DEXPit starts with cards.</b><p>Players open an arena pack. The HexPit launcher records what they own and how much GAME they can claim. Flap opens the first market when the round fills.</p></article><article><b>A second game could start with gear.</b><p>Another Engines of Creation title could adapt the item catalog and sale rules, then reuse the stablecoin collection, factory pattern and pool settlement. A second title is our proposed next test.</p></article></div></section></main><footer>Engines of Creation &nbsp; / &nbsp; HexPit <a href="https://docs.flap.sh/en/flap/v2/developers/pool-launch">Flap protocol ↗</a></footer><div id="pack-opening"></div><script type="module" src="./app.js"></script></body></html>
+<section id="wallet">
+  <div class="launch-layout">
+    <div class="launch-content">
+      <div class="overline">BSC TESTNET · CHAIN 97</div>
+      <h2>Use a wallet</h2>
+      <p id="help"></p>
+      <div class="tools" id="actions"></div>
+      <output id="feedback" aria-live="polite"></output>
+      <div id="wallet-receipt" hidden>
+        <div class="ignition-stage" id="wallet-stage">
+          <div id="wallet-cards" class="cards pack-cards"></div>
+        </div>
+        <button class="pack-secondary" id="wallet-replay">Replay pack opening</button>
+      </div>
+    </div>
+    <aside id="wallet-funding" class="funding-panel" aria-label="Testnet pool funding"></aside>
+  </div>
+</section>
+<section><div class="overline">THE STUDIO</div><h2>From one game to the next</h2><div class="split"><article><b>DEXPit starts with cards.</b><p>Players open an arena pack. The HexPit launcher records what they own and how much GAME they can claim. Flap opens the first market when the round fills.</p></article><article><b>A second game could start with gear.</b><p>Another Engines of Creation title could adapt the item catalog and sale rules, then reuse the stablecoin collection, factory pattern and pool settlement. A second title is our proposed next test.</p></article></div></section></main><footer>Engines of Creation &nbsp; / &nbsp; HexPit <a href="https://docs.flap.sh/en/flap/v2/developers/pool-launch">Flap protocol ↗</a></footer><template id="funding-template">
+  <div class="funding-title">
+    <h3>Pool funding</h3>
+    <span class="funding-state">Loading</span>
+  </div>
+  <div class="funding-total"><strong>—</strong><span>/ 60 test USD</span></div>
+  <div class="funding-track" role="progressbar" aria-label="Pool funding" aria-valuemin="0" aria-valuemax="60">
+    <span class="funding-fill"></span>
+  </div>
+  <p class="funding-amount"></p>
+  <p class="funding-note" aria-live="polite"></p>
+</template>
+<div id="pack-opening"></div><script type="module" src="./app.js"></script></body></html>
