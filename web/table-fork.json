@@ -1,0 +1,59 @@
+{
+  "mode": "fork",
+  "chainId": 97,
+  "factory": "0x03580dc9d429d64700822d8816f74ed5b622c1dc",
+  "table": "0xcc06fdd951866e5ebd7a0761ce0d0dd52f4bded5",
+  "launcher": "0x95Bb2B571Af990bAA9f350f391acb8305cf3A6e5",
+  "token": "0xF647A430ddA19815FCa3065253a735368fd87777",
+  "pool": "0x9b769bcAC956624eF34cbb43792C55A72750705D",
+  "startSold": 10,
+  "target": 12,
+  "price": "5",
+  "reserve": "19230.769230769230769231",
+  "players": [
+    {
+      "address": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "cards": [
+        22,
+        17,
+        42,
+        3,
+        47
+      ],
+      "game": "9615.384615384615384615",
+      "soloGame": "12820.51282051282051282",
+      "claim": "0x4f788b43d15e40d12157972bffd3eba4b4a77670319c09cb0d08896e08eb8526"
+    },
+    {
+      "address": "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+      "cards": [
+        1,
+        107,
+        94,
+        22,
+        69
+      ],
+      "game": "9615.384615384615384616",
+      "soloGame": "6410.256410256410256411",
+      "claim": "0x4b77f00a0c3d05d9a79f8675eadc0677ebaae51f337e937cad29db6d1c42a44f"
+    }
+  ],
+  "steps": {
+    "deploy": "0xd501ab39707e65e10a03819b4ea25665d8526da846b2feef919894073d4a2ad6",
+    "create": "0xe8806c20846df160a0b16cf502f7d6bd864f0c7bfc015f717b6e7eb86787e262",
+    "fundFirst": "0xbbc6d9a20568177cdb6a834f6587a08208c8a5df909210948275ddaca5900e48",
+    "fundSecond": "0x8fad1cc17d24735de27e2d250723881c4b4ebcb72665922269a247e3ccbcd7d3",
+    "approveSolo": "0xbc20df08116f1d08e3051b8606ae641453bc3ba0def5bf4795939472fa0038b7",
+    "tenSoloPacks": "0xe6b6fb224d6ec14e7467e0f48a155d8b6d45cfc2cee56d098f4201a379048205",
+    "approveFirstSeat": "0xbb04bf028ed9e57e1116d4815a34848b3d9022718ebb71a96b394ebb747f39aa",
+    "approveSecondSeat": "0x1fb3992617634f79b2020b043006f481b8ddcdc196272f44a491b6f0b8dca051",
+    "pledge": "0xa8b2685ad80d7fefec9b7fe952cb1a5e7a66017c067ef956bec4e8bc64137a82",
+    "withdraw": "0x262a9fca4f06e2d0e2073e2da9f2dae45d48081cd9a8063665394f391d5ee2bc",
+    "approveAfterRefund": "0x47cf07ac009492f93e93967e34b8de10d3a504e4157c57dfb76e93a49acf78ce",
+    "repledge": "0x0f27075716d6dee6e62f85ae1f9b961ff4c2dc398cf6471b500cc23d63fe3e43",
+    "close": "0x61a953928ba13d56327f0d15da4b91a48b384a2f27c7318230b19159060878fa",
+    "claimFirstSeat": "0x4f788b43d15e40d12157972bffd3eba4b4a77670319c09cb0d08896e08eb8526",
+    "claimSecondSeat": "0x4b77f00a0c3d05d9a79f8675eadc0677ebaae51f337e937cad29db6d1c42a44f"
+  },
+  "closingBlock": "145103153"
+}

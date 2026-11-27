@@ -10,14 +10,18 @@ interface IFaucetUSD {
     function balanceOf(address) external view returns (uint256);
 }
 interface ITestnetHelper { function whitelist(address,uint16) external; }
-contract PackLauncherTest is Test {
+abstract contract PackFixture is Test {
     IPortal constant portal=IPortal(0x000042108465206185A077Edc3F3fd2b49060000);
     IFaucetUSD constant usd=IFaucetUSD(0x190C989D5665a0e404B444b53CAE9AbCfb600157);
     address player=makeAddr("founder");
     PackLauncher round;
-    function setUp() public {
-        vm.createSelectFork(vm.envOr("BSC_TESTNET_RPC_URL",string("https://bsc-testnet-rpc.publicnode.com")),145027709);
-        PackFactory factory=new PackFactory();
+    PackFactory factory;
+    function setUp() public virtual {
+        string memory rpc = vm.envOr("BSC_TESTNET_RPC_URL", string("https://bsc-testnet-rpc.publicnode.com"));
+        uint256 blockNumber = vm.envOr("BSC_TESTNET_FORK_BLOCK", uint256(0));
+        if (blockNumber == 0) vm.createSelectFork(rpc);
+        else vm.createSelectFork(rpc, blockNumber);
+        factory=new PackFactory();
         ITestnetHelper(0x77779969a11eff7582f3bCf48135A846A3457777).whitelist(address(factory),100);
         bytes32 salt=0x000000000000000000000000397c78d9f311bbfa1def15d7e03b0ff12e8e5725;
         vm.deal(address(this),1 ether);
@@ -26,6 +30,9 @@ contract PackLauncherTest is Test {
         usd.mint(player,60 ether);
         vm.prank(player);usd.approve(address(round),60 ether);
     }
+}
+
+contract PackLauncherTest is PackFixture {
     function testExpiredRoundRefundsOnceAndInvalidatesGame() public {
         vm.startPrank(player);
         round.mintPacks(2,round.cumulative(2));

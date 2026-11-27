@@ -3,7 +3,7 @@
 <meta name="theme-color" content="#100e13"><meta name="description" content="Open a five-card HexPit pack. Follow its stablecoin payment into a Flap pool on BNB Smart Chain testnet.">
 <title>DEXPit Founding Packs | Engines of Creation</title><link rel="stylesheet" href="./style.css"></head>
 <body><header><a class="brand" href="./">⬢ &nbsp; DEXPIT</a><nav><a href="#round">Packs</a><a href="#faucet">Faucet</a><a href="#evidence">Proof</a><a href="./watch.html">Film</a><a href="https://github.com/eoc-gold/hexpit-flap-launch">Source ↗</a></nav></header>
-<main><section class="hero"><div class="intro"><div class="overline">ENGINES OF CREATION &nbsp; / &nbsp; FLAP POOL LAUNCH</div><h1>The Founding<br><em>Packs</em></h1><p>Open five arena cards. Your 5 test USD goes into the first GAME pool. Every pack costs the same. The twelfth pack opens trading.</p><div class="tools hero-actions"><a class="cta" href="#round">Open packs ↓</a><a href="#faucet">Get test USD ↓</a></div></div>
+<main><section class="hero"><div class="intro"><div class="overline">ENGINES OF CREATION &nbsp; / &nbsp; FLAP POOL LAUNCH</div><h1>The Founding<br><em>Packs</em></h1><p>Every five-card pack puts 5 test USD into the first GAME pool. Open a pack solo, or pledge with other players to fill the remaining packs together.</p><div class="tools hero-actions"><a class="cta" href="#round">Open packs ↓</a><a href="#table">Try the closing table ↓</a></div></div>
 <div class="fan" aria-label="Three cards from the HexPit set"><img src="./art/mage-fireball.webp" alt="Fireball"><img src="./art/warrior-hexreaver.webp" alt="Hexreaver"><img src="./art/ranger-apex-predator.webp" alt="Apex Predator"></div></section>
 <section id="round">
   <div class="launch-layout">
@@ -36,7 +36,27 @@
     <aside id="replay-funding" class="funding-panel" aria-label="Replay pool funding"></aside>
   </div>
 </section>
-<section id="evidence"><div class="overline">SETTLEMENT</div><h2>Where the mint went</h2><div class="split"><article><b>60 test USD + 500,000 GAME</b><p>The launcher passes the whole pack raise to Flap. The Portal creates the token, seeds its trading pair and burns the liquidity tokens.</p></article><article><b>500,000 GAME for players</b><p>The other half of supply funds pack claims. Earlier packs earn more GAME. Card rarity changes the hand you open and has no effect on the amount you can claim.</p></article></div><p id="proof"></p><div id="prooflinks" class="tools"></div></section>
+<section id="table">
+  <div class="overline" id="table-mode">Two-wallet receipt replay</div>
+  <h2>The closing table</h2>
+  <p class="table-intro">Ten packs have raised 50 test USD. Two players can each pledge 5 for the last two. The first can leave with a full refund. The second opens both packs and the pool in one transaction.</p>
+  <div class="launch-layout">
+    <div class="launch-content table-room">
+      <div id="table-seats"></div>
+      <div class="tools table-controls">
+        <button id="table-next">Pledge for seat 1</button>
+        <button id="table-back" class="pack-secondary" hidden>Withdraw pledge</button>
+      </div>
+      <p id="table-message" role="status"></p>
+      <div class="tools wallet-links"><a id="table-record">Two-wallet receipts ↗</a><a id="table-close-tx" hidden>Pool transaction ↗</a><a id="table-live-link" href="#wallet-table" hidden>Join with a wallet ↓</a></div>
+    </div>
+    <aside id="table-funding" class="funding-panel" aria-label="Closing table funding">
+      <div class="table-escrow"><span>Refundable pledges</span><b id="table-escrow">0 test USD</b></div>
+    </aside>
+  </div>
+</section>
+<section id="evidence"><div class="overline">SETTLEMENT</div><h2>Where the mint went</h2><div class="split"><article><b>60 test USD + 500,000 GAME</b><p>Flap created the GAME tax token, seeded its trading pair and burned the LP. GAME launched with a 1% buy and sell tax for 30 days, allocated to liquidity.</p></article><article><b>500,000 GAME for players</b><p>The other half of supply funds pack claims. Earlier solo packs earn more GAME. Card rarity changes the hand you open and has no effect on the amount you can claim.</p></article></div><p id="proof"></p><div id="prooflinks" class="tools"></div>
+<div class="tools verify-tools"><button id="verify-launch" class="pack-secondary">Verify receipts on BSC Testnet</button><span id="verified-result" role="status"></span></div></section>
 <section id="wallet">
   <div class="launch-layout">
     <div class="launch-content">
@@ -78,6 +98,11 @@
           <p id="help">Checking the testnet round…</p>
           <div class="tools" id="actions"></div>
         </div>
+        <div id="wallet-table" class="wallet-mint" hidden>
+          <h3>Take a table seat</h3>
+          <p id="live-table-quote"></p><p id="live-table-help"></p>
+          <div class="tools" id="live-table-actions"></div>
+        </div>
         <div class="wallet-feedback" id="wallet-feedback" hidden>
           <output id="feedback" aria-live="polite"></output>
           <a id="wallet-tx" target="_blank" rel="noopener" hidden>View transaction ↗</a>
@@ -90,7 +115,9 @@
         <button class="pack-secondary" id="wallet-replay">Replay pack opening</button>
       </div>
     </div>
-    <aside id="wallet-funding" class="funding-panel" aria-label="Testnet pool funding"></aside>
+    <aside id="wallet-funding" class="funding-panel" aria-label="Testnet pool funding">
+      <div class="table-escrow" id="live-escrow-row" hidden><span>Refundable pledges</span><b id="live-escrow">—</b></div>
+    </aside>
   </div>
 </section>
 <section><div class="overline">THE STUDIO</div><h2>From one game to the next</h2><div class="split"><article><b>DEXPit starts with cards.</b><p>Players open an arena pack. The HexPit launcher records what they own and how much GAME they can claim. Flap opens the first market when the round fills.</p></article><article><b>A second game could start with gear.</b><p>Another Engines of Creation title could adapt the item catalog and sale rules, then reuse the stablecoin collection, factory pattern and pool settlement. A second title is our proposed next test.</p></article></div></section></main><footer>Engines of Creation &nbsp; / &nbsp; HexPit <a href="https://docs.flap.sh/en/flap/v2/developers/pool-launch">Flap protocol ↗</a></footer><template id="funding-template">

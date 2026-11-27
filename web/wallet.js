@@ -1,8 +1,10 @@
-import { createPublicClient, createWalletClient, custom, formatEther, http, isAddress, parseAbi, parseEther, parseEventLogs, zeroAddress } from 'viem';
+import { createPublicClient, createWalletClient, custom, formatEther, http, isAddress, parseAbi, parseEther, parseEventLogs, toHex, zeroAddress } from 'viem';
 import { bscTestnet } from 'viem/chains';
-import { launchAbi, portal, rpc, usd, usdAbi } from '../scripts/network.mjs';
+import { launchAbi, portal, rpc, tableAbi, usd, usdAbi } from '../scripts/network.mjs';
 import { ignitionStage, reducedMotion } from './ignition/stage.js';
 import { fundingPanel } from './round-progress.js';
+import { forkTable, publicTable } from './closing-table.js';
+import { tableOffer } from './table-wallet.js';
 
 const el = id => document.getElementById(id);
 const explorer = bscTestnet.blockExplorers.default.url;
@@ -13,15 +15,17 @@ const quantity = value => Number(formatEther(value)).toLocaleString('en-US', { m
 export function initWallet({ publicRound, fork, catalog, replayPack }) {
   const params = new URLSearchParams(location.search);
   const local = ['127.0.0.1', 'localhost'].includes(location.hostname) && params.has('fork');
-  const endpoint = local ? 'http://127.0.0.1:18797' : rpc;
+  const tableFork = local && params.get('fork') === 'table';
+  const endpoint = tableFork ? 'http://127.0.0.1:18972' : local ? 'http://127.0.0.1:18797' : rpc;
   const chain = local ? {
     ...bscTestnet,
     name: 'Local BSC testnet fork',
     rpcUrls: { default: { http: [endpoint] } }
   } : bscTestnet;
-  const round = local ? fork : publicRound;
+  const round = local && !tableFork ? fork : publicRound;
+  const table = (tableFork ? forkTable : local ? undefined : publicTable)?.table;
   const address = params.get('launcher') || round.judgeLauncher || round.launcher;
-  const client = createPublicClient({ chain, transport: http(endpoint) });
+  const client = createPublicClient({ chain, transport: http(endpoint), cacheTime: 0 });
   const updateFunding = fundingPanel(el('wallet-funding'));
   const connect = el('connect-wallet');
   const copy = el('copy-wallet');
@@ -30,12 +34,18 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
   const actions = el('actions');
   const mintButton = document.createElement('button');
   actions.append(mintButton);
+  const tableButton = document.createElement('button');
+  el('live-table-actions').append(tableButton);
+  el('wallet-table').hidden = !table;
+  el('live-escrow-row').hidden = !table;
+  if (tableFork) el('table-live-link').hidden = false;
   const assetLink = el('faucet-contract');
 
-  let wallet, account, network, balance, gas, roundAction, lastPack, walletStage;
+  let wallet, account, network, balance, gas, roundAction, tableAction, lastPack, walletStage;
   let working = false;
   let syncPending = false;
   let factoryVerified = false;
+  let tableVerified = false;
 
   assetLink.href = explorer + '/token/' + usd;
   assetLink.hidden = local;
@@ -74,6 +84,10 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
     mintButton.disabled = working || !rightChain || !hasGas;
     mintButton.textContent = roundAction?.label ?? '';
     mintButton.onclick = roundAction ? () => run(roundAction.execute) : null;
+    tableButton.hidden = !tableAction?.label;
+    tableButton.disabled = working || !rightChain || !hasGas;
+    tableButton.textContent = tableAction?.label || '';
+    tableButton.onclick = tableAction?.label ? () => run(tableAction.execute) : null;
   }
 
   async function switchNetwork() {
@@ -106,7 +120,7 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
       balance = gas = undefined;
     }
     network = account ? await wallet.getChainId() : undefined;
-    roundAction = undefined;
+    roundAction = tableAction = undefined;
     const walletUpdate = account ? Promise.all([
       read(usd, usdAbi, 'balanceOf', [account]),
       client.getBalance({ address: account })
@@ -120,6 +134,10 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
     }) : Promise.resolve();
     await Promise.all([walletUpdate, refreshRound(walletUpdate).catch(error => {
       el('help').textContent = 'Could not load this testnet round. The faucet is available separately.';
+      if (table) {
+        el('live-table-quote').textContent = '';
+        el('live-table-help').textContent = 'Could not verify this round.';
+      }
       console.error(error);
     })]);
   }
@@ -133,6 +151,7 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
       await task();
     } catch (error) {
       report(error.shortMessage || error.message);
+      if (task !== sync) syncPending = true;
     } finally {
       working = false;
       render();
@@ -173,10 +192,24 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
     void run(() => transact(usd, usdAbi, 'mint', [account, parseEther(size)], size + ' test USD added to your wallet.'));
   };
 
-  async function transact(target, abi, functionName, args, confirmation) {
+  async function reveal(pack, hash) {
+    lastPack = { ...pack, hash: local ? undefined : hash };
+    el('wallet-receipt').hidden = false;
+    walletStage ??= ignitionStage(el('wallet-stage'), el('wallet-cards'), catalog);
+    walletStage.charge(pack.cards);
+    if (!reducedMotion.matches) await new Promise(resolve => setTimeout(resolve, 680));
+    walletStage.show(pack.cards, true);
+  }
+
+  async function transact(target, abi, functionName, args, confirmation, onConfirmed) {
     const [sender] = await wallet.getAddresses();
     if (!sender || sender !== account) throw Error('The connected wallet changed. Try again with the active account.');
     if (await wallet.getChainId() !== chain.id) throw Error('Switch to BSC Testnet before confirming.');
+    if (local) {
+      const tip = await client.getBlock();
+      const walletBlock = await wallet.request({ method: 'eth_getBlockByNumber', params: [toHex(tip.number), false] });
+      if (walletBlock?.hash !== tip.hash) throw Error('Select the local fork RPC in your wallet: ' + endpoint);
+    }
     const config = { account: sender, address: target, abi, functionName, args };
     await client.simulateContract(config);
     const estimate = await client.estimateContractGas(config);
@@ -192,17 +225,27 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
       const pack = parseEventLogs({ abi: launchAbi, eventName: 'PackOpened', logs })[0]?.args;
       if (pack) {
         const poolOpened = parseEventLogs({ abi: launchAbi, eventName: 'PoolOpened', logs }).length > 0;
-        lastPack = { ...pack, game: formatEther(pack.game), poolOpened, hash: local ? undefined : hash };
         report('Pack minted · ' + quantity(pack.game) + ' GAME allocated.', hash);
-        el('wallet-receipt').hidden = false;
-        walletStage ??= ignitionStage(el('wallet-stage'), el('wallet-cards'), catalog);
-        walletStage.charge(pack.cards);
-        if (!reducedMotion.matches) await new Promise(resolve => setTimeout(resolve, 680));
-        walletStage.show(pack.cards, true);
+        await reveal({ ...pack, number: Number(pack.number), game: formatEther(pack.game), poolOpened }, hash);
         updateFunding({ packs: Number(pack.number), poolOpened, payment: true });
       }
     }
+    if (onConfirmed) await onConfirmed(hash);
     await sync();
+  }
+
+  async function refreshTable(sold, closed, expired, walletUpdate) {
+    if (!table) return;
+    if (!tableVerified) {
+      const tableFactory = await read(table, tableAbi, 'factory');
+      if (tableFactory.toLowerCase() !== round.factory.toLowerCase()) throw Error('Unknown table factory.');
+      tableVerified = true;
+    }
+    await walletUpdate;
+    const showEscrow = value => { el('live-escrow').textContent = quantity(value) + ' test USD'; };
+    tableAction = await tableOffer({ table, round: address, account, balance, sold, closed, expired, read, transact, reveal, showEscrow });
+    el('live-table-quote').textContent = tableAction.quote;
+    el('live-table-help').textContent = tableAction.help;
   }
 
   async function refreshRound(walletUpdate) {
@@ -225,9 +268,15 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
     const [chainSold, deadline, pool] = await Promise.all(['sold', 'deadline', 'pool'].map(fn => read(address, launchAbi, fn)));
     const closed = pool !== zeroAddress || Boolean(lastPack?.poolOpened);
     const expired = !closed && (await client.getBlock()).timestamp >= deadline;
-    const latestMint = lastPack?.number ?? 0n;
+    const latestMint = BigInt(lastPack?.number ?? 0);
     const sold = chainSold > latestMint ? chainSold : latestMint;
     updateFunding({ packs: Number(sold), poolOpened: closed, expired, payment: sold === latestMint && sold > 0n });
+    await refreshTable(sold, closed, expired, walletUpdate).catch(error => {
+      el('live-escrow').textContent = '—';
+      el('live-table-quote').textContent = '';
+      el('live-table-help').textContent = 'The table could not be read. Return to this tab to refresh.';
+      console.error(error);
+    });
 
     if (!account) {
       el('help').textContent = closed ? 'Connect the wallet that minted to check its GAME claim.'
@@ -237,7 +286,7 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
     }
     if (closed || expired) {
       const value = await read(address, launchAbi, closed ? 'allocation' : 'paid', [account]);
-      el('help').textContent = closed ? (value > 0n ? 'The pool is open. Your GAME is ready to claim.' : 'The pool is open. This wallet has no outstanding claim.')
+      el('help').textContent = closed ? (value > 0n ? 'The pool is open. Your solo pack GAME is ready to claim.' : 'The pool is open. This wallet has no outstanding solo pack claim.')
         : (value > 0n ? 'This round expired. Your test USD is ready to refund.' : 'This round expired. This wallet has no refund to claim.');
       if (value > 0n) {
         roundAction = closed ? {
@@ -251,10 +300,13 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
       return;
     }
 
-    const [price, allowance] = await Promise.all([
+    const [price, allowance, start, end] = await Promise.all([
       read(address, launchAbi, 'PACK_PRICE'),
-      read(usd, usdAbi, 'allowance', [account, address])
+      read(usd, usdAbi, 'allowance', [account, address]),
+      read(address, launchAbi, 'cumulative', [sold]),
+      read(address, launchAbi, 'cumulative', [sold + 1n])
     ]);
+    const minimum = end - start;
     await walletUpdate;
     if (balance === undefined) {
       el('help').textContent = 'Your test USD balance is unavailable.';
@@ -265,24 +317,21 @@ export function initWallet({ publicRound, fork, catalog, replayPack }) {
       return;
     }
     if (allowance < price) {
-      el('help').textContent = 'Approve 5 test USD for the launcher, then open your pack.';
+      el('help').textContent = 'The next solo pack earns ' + quantity(minimum) + ' GAME. Approve 5 test USD, then open your pack.';
       roundAction = {
         label: 'Approve 5 test USD',
         execute: () => transact(usd, usdAbi, 'approve', [address, price], 'Approved 5 test USD. Your pack is ready to mint.')
       };
       return;
     }
-    el('help').textContent = 'Open five cards. Your 5 test USD goes into the Flap pool reserve.';
+    el('help').textContent = 'Five cards and ' + quantity(minimum) + ' GAME for 5 test USD. A lower allocation requires a new quote.';
     roundAction = {
       label: 'Open pack · 5 test USD',
-      execute: async () => {
-        const currentSold = await read(address, launchAbi, 'sold');
-        const [start, end] = await Promise.all([currentSold, currentSold + 1n].map(n => read(address, launchAbi, 'cumulative', [n])));
-        await transact(address, launchAbi, 'mintPacks', [1n, end - start], 'Pack minted.');
-      }
+      execute: () => transact(address, launchAbi, 'mintPacks', [1n, minimum], 'Pack minted.')
     };
   }
 
   window.addEventListener('focus', requestSync);
+  if (table) setInterval(() => { if (account && !working && !document.hidden) requestSync(); }, 15000);
   requestSync();
 }

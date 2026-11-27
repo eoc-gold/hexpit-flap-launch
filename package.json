@@ -6,6 +6,8 @@
   "scripts": {
     "build": "vite build web --target es2022 --base=./ --outDir ../dist && node scripts/copy-static.mjs",
     "dev": "vite web",
+    "verify:launch": "node scripts/verify-launch.mjs",
+    "table:rehearse": "node scripts/table-round.mjs",
     "rehearse": "node scripts/round.mjs",
     "live": "node scripts/round.mjs --testnet"
   },

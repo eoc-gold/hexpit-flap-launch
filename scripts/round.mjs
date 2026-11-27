@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
-import { randomBytes } from 'node:crypto';
+import { mineSalt } from './vanity-salt.mjs';
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { createPublicClient, createWalletClient, http, parseAbi, encodeAbiParameters, parseEther,
-  parseEventLogs, getCreate2Address, concatHex, keccak256, toHex, zeroAddress, formatEther } from 'viem';
+  parseEventLogs, zeroAddress, formatEther } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { bscTestnet } from 'viem/chains';
-import { rpc, portal, helper, usd, tokenImpl, portalAbi, usdAbi, launchAbi } from './network.mjs';
+import { rpc, portal, helper, usd, portalAbi, usdAbi, launchAbi } from './network.mjs';
 
 const live = process.argv.includes('--testnet');
 const url = live ? rpc : 'http://127.0.0.1:18797';
@@ -33,15 +33,6 @@ assert.equal(state.player.toLowerCase(),player.toLowerCase());
 function save() {
   writeFileSync(stateFile+'.tmp',JSON.stringify(state,null,2));
   renameSync(stateFile+'.tmp',stateFile);
-}
-const cloneHash = keccak256(concatHex(['0x3d602d80600a3d3981f3','0x363d3d373d3d3d363d73',tokenImpl,'0x5af43d82803e903d91602b57fd5bf3']));
-function mineSalt() {
-  let i = BigInt('0x'+randomBytes(20).toString('hex'));
-  while (true) {
-    const salt = toHex(i++,{size:32});
-    const predicted = getCreate2Address({from:portal,salt,bytecodeHash:cloneHash});
-    if (predicted.toLowerCase().endsWith('7777')) return {salt,predicted};
-  }
 }
 if (!state.salt) { Object.assign(state,mineSalt()); save(); }
 async function step(name, submit) {

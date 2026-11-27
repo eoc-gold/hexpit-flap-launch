@@ -16,4 +16,10 @@ Reviewed November 27, 2026, Bangkok time. The following sources informed the sub
 | [Flap faucet](https://abc.flap.sh/faucet?lang=en), [BNB gas faucet guidance](https://docs.bnbchain.org/bnb-smart-chain/developers/faucet/), [testnet helper](https://testnet.bscscan.com/address/0x77779969a11eff7582f3bCf48135A846A3457777#code) | The USD faucet token reports symbol USD and 18 decimals. The Portal reported an enabled quote and a 1e18 reference price. The helper overload used by the entry is whitelist(address,uint16). Native test BNB pays only protocol setup and gas. |
 | Existing DEXPit mint pilot and canonical catalog | Preserved five-card packs, 117 card definitions, rarity bands, separate card ownership and buyer GAME entitlements. The previous private demonstration used a local-only market. The public entry contains its own BSC testnet contracts and evidence. |
 
-[Public on-chain evidence](../web/round.json) · [Official developer overview](https://docs.flap.sh/en/flap/v2/developers)
+## Comparison with Flap's examples
+
+Flap explicitly lists NFT mints, in-game purchases and crowdfunding as sources of opening liquidity. The distinctive design in DEXPit is the closing table. The group quotes all remaining packs, each wallet escrows the same fixed price, and the last seat atomically settles the order and opens the pool. Only that order's declining GAME allocations are pooled and divided across its seats. Each seat keeps its own five-card hand. A competing solo order invalidates the quote and enables full pledge refunds. [Flap pool launch mechanisms](https://docs.flap.sh/en/flap/v2/developers/pool-launch/basic-and-mechanism) · [Closing table implementation](../src/ClosingTable.sol)
+
+Pooling funds for an NFT purchase also has prior art. Party's BuyCrowdfund buys a shared NFT and contributors receive governance rights. DEXPit gives each participant a separate hand and a claim on the specific GAME left in a game's opening sale. [Party crowdfund contracts](https://docs.partydao.org/docs/crowdfund/Overview)
+
+The two-wallet rehearsal demonstrates settlement and independent claims. Whether this attracts independent players or helps more rounds finish is an open market question. [Two-wallet fork receipts](../web/table-fork.json) · [Public pack launch evidence](../web/round.json)

@@ -1,6 +1,10 @@
 import { fundingPanel, PACK_TARGET } from './round-progress.js';
 import { ignitionStage, reducedMotion } from './ignition/stage.js';
 import { initWallet } from './wallet.js';
+import { createPublicClient, http } from 'viem';
+import { rpc } from '../scripts/network.mjs';
+import { verifyReceipts } from '../scripts/verify-receipts.mjs';
+import { closingReplay } from './closing-table.js';
 const el=id=>document.getElementById(id);
 const [publicRound,fork,catalog]=await Promise.all(['round','rehearsal','catalog'].map(async file=>{
   const r=await fetch('./'+file+'.json'); if (!r.ok) throw Error('Missing '+file); return r.json();
@@ -13,7 +17,6 @@ let opened = 0;
 let waiting = 0;
 let active = false;
 let replayTimer;
-let lastWalletPack;
 const replayButton = el('replay-pack');
 const openButton = el('open-pack');
 const resetButton = el('reset-round');
@@ -144,4 +147,20 @@ el('proof').textContent=live?'Confirmed on public BSC testnet. Open the transact
 if (live) for (const [name,key] of [['Factory','factory'],['Create launcher','create'],['Final mint + pool','openLast'],['Claim','claim1']]) {
   const a=document.createElement('a');a.href='https://testnet.bscscan.com/tx/'+data.steps[key].hash;a.textContent=name+' ↗';el('prooflinks').append(a);
 }
+closingReplay(catalog);
+const verifyButton = el('verify-launch');
+verifyButton.hidden = !live;
+verifyButton.onclick = async () => {
+  verifyButton.disabled = true;
+  const status = el('verified-result');
+  status.textContent = 'Reading confirmed testnet receipts…';
+  try {
+    const result = await verifyReceipts(createPublicClient({ transport: http(rpc) }), publicRound);
+    status.textContent = 'Verified 60 cards across 12 packs. The pool opened in block ' + result.block + '. Both deposits, the LP burn and the later 500,000 GAME claim match the receipts.';
+  } catch (error) {
+    status.textContent = 'Verification unavailable. ' + (error.shortMessage || error.message);
+  } finally {
+    verifyButton.disabled = false;
+  }
+};
 initWallet({ publicRound, fork, catalog, replayPack });

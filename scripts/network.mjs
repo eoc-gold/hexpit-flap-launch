@@ -15,6 +15,14 @@ export const usdAbi = parseAbi([
  'function mint(address,uint256)', 'function approve(address,uint256) returns (bool)',
  'function balanceOf(address) view returns (uint256)', 'function allowance(address,address) view returns (uint256)'
 ]);
+export const tableAbi = parseAbi([
+ 'struct Seat { uint8 position; uint8[5] cards; bool claimed; }',
+ 'function factory() view returns (address)',
+ 'function tableState(address) view returns (uint256 startSold,uint256 pledged,uint256 reward)',
+ 'function seatOf(address,address) view returns (Seat)',
+ 'function claimable(address,address) view returns (uint256)',
+ 'function join(address,uint256)', 'function leave(address)', 'function release(address)', 'function claim(address,address)'
+]);
 export const launchAbi = parseAbi([
  'function sold() view returns (uint256)', 'function deadline() view returns (uint256)',
  'function cumulative(uint256) pure returns (uint256)', 'function allocation(address) view returns (uint256)',

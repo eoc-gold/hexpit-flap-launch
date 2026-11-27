@@ -360,3 +360,52 @@ button:not(#pack-opening *)#claim-faucet {
   body > header { gap: 10px; }
   nav a { white-space: nowrap; }
 }
+
+.table-intro { max-width: 65ch; margin: 4px 0 20px; }
+.table-room {
+  border: 1px solid #563750;
+  border-radius: 6px;
+  padding: clamp(14px, 2.5vw, 28px);
+  background: linear-gradient(145deg, #251b2b, #151018 75%);
+}
+#table-seats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.table-room .table-seat {
+  padding: 14px;
+  min-width: 0;
+  border: 1px dashed #735a77;
+  border-radius: 4px;
+  background: #1b141f;
+}
+.table-room .table-seat[data-seated="true"] { border: 1px solid #b37687; background: linear-gradient(135deg, #332333, #221a29); }
+.table-seat-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 3px 10px; justify-content: space-between; }
+.table-seat-title h3 { margin: 0; font: 700 20px Georgia, serif; }
+.table-seat-title b { font-size: 12px; color: #ffc5a5; }
+.table-room .table-seat p { margin: 8px 0 0; font-size: 13px; }
+.table-hand { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; margin-top: 12px; }
+.table-hand figure { margin: 0; }
+.table-hand img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; border-radius: 3px; }
+.table-controls, .verify-tools { margin-top: 16px; align-items: center; }
+#table-next { background: linear-gradient(110deg, #923e4d, #703980); }
+#table-message { min-height: 2.8em; margin: 10px 0 6px; }
+#table-funding, #wallet-funding:has(.table-escrow:not([hidden])) { display: flex; flex-direction: column; }
+.table-escrow {
+  order: 1;
+  border-top: 1px solid #56394f;
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+.table-escrow b { color: #ffc5a5; white-space: nowrap; }
+#live-table-quote { color: #ffd7b6; font-weight: 700; }
+#live-table-actions:has(button:not([hidden])) { margin-top: 12px; }
+#verified-result { max-width: 60ch; font-size: 13px; color: #e8d2e3; }
+@media (max-width: 710px) {
+  #table-funding { position: static; }
+  .table-escrow { padding-top: 6px; }
+}
+@media (max-width: 520px) {
+  #table-seats { grid-template-columns: 1fr; }
+  .table-hand { max-width: 265px; }
+}
