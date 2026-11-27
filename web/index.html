@@ -2,8 +2,8 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#100e13"><meta name="description" content="Open a five-card HexPit pack. Follow its stablecoin payment into a Flap pool on BNB Smart Chain testnet.">
 <title>DEXPit Founding Packs | Engines of Creation</title><link rel="stylesheet" href="./style.css"></head>
-<body><header><a class="brand" href="./">⬢ &nbsp; DEXPIT</a><nav><a href="#round">Launch round</a><a href="#evidence">Proof</a><a href="./watch.html">Film</a><a href="https://github.com/eoc-gold/hexpit-flap-launch">Source ↗</a></nav></header>
-<main><section class="hero"><div class="intro"><div class="overline">ENGINES OF CREATION &nbsp; / &nbsp; FLAP POOL LAUNCH</div><h1>The Founding<br><em>Packs</em></h1><p>Open five arena cards. Your 5 test USD goes into the first GAME pool. Every pack costs the same. The twelfth pack opens trading.</p><a class="cta" href="#round">Open packs ↓</a></div>
+<body><header><a class="brand" href="./">⬢ &nbsp; DEXPIT</a><nav><a href="#round">Packs</a><a href="#faucet">Faucet</a><a href="#evidence">Proof</a><a href="./watch.html">Film</a><a href="https://github.com/eoc-gold/hexpit-flap-launch">Source ↗</a></nav></header>
+<main><section class="hero"><div class="intro"><div class="overline">ENGINES OF CREATION &nbsp; / &nbsp; FLAP POOL LAUNCH</div><h1>The Founding<br><em>Packs</em></h1><p>Open five arena cards. Your 5 test USD goes into the first GAME pool. Every pack costs the same. The twelfth pack opens trading.</p><div class="tools hero-actions"><a class="cta" href="#round">Open packs ↓</a><a href="#faucet">Get test USD ↓</a></div></div>
 <div class="fan" aria-label="Three cards from the HexPit set"><img src="./art/mage-fireball.webp" alt="Fireball"><img src="./art/warrior-hexreaver.webp" alt="Hexreaver"><img src="./art/ranger-apex-predator.webp" alt="Apex Predator"></div></section>
 <section id="round">
   <div class="launch-layout">
@@ -23,7 +23,7 @@
           <span id="queue-status" role="status">Queue empty</span>
           <button class="pack-secondary" id="clear-queue" disabled>Clear queue</button>
           <button class="pack-secondary" id="reset-round" disabled>Restart replay</button>
-          <a href="#wallet">Mint with a wallet ↓</a>
+          <a href="#wallet">Mint on testnet ↓</a>
         </div>
       </div>
       <div class="tools receipt-links">
@@ -41,10 +41,48 @@
   <div class="launch-layout">
     <div class="launch-content">
       <div class="overline">BSC TESTNET · CHAIN 97</div>
-      <h2>Use a wallet</h2>
-      <p id="help"></p>
-      <div class="tools" id="actions"></div>
-      <output id="feedback" aria-live="polite"></output>
+      <h2>Mint on testnet</h2>
+      <div class="wallet-console">
+        <div class="wallet-console-header">
+          <div>
+            <strong id="wallet-account">Wallet disconnected</strong>
+            <small id="wallet-network">BSC Testnet · Chain 97</small>
+          </div>
+          <button id="copy-wallet" class="pack-secondary" hidden>Copy address</button>
+          <button id="connect-wallet">Connect wallet</button>
+        </div>
+        <div class="wallet-faucet" id="faucet">
+          <div class="wallet-faucet-header">
+            <h3>Test USD faucet</h3>
+            <span id="faucet-balance">— test USD</span>
+          </div>
+          <form id="faucet-form">
+            <label for="faucet-amount">Amount</label>
+            <div class="wallet-faucet-controls">
+              <select id="faucet-amount">
+                <option value="5">5 test USD · 1 pack</option>
+                <option value="15">15 test USD · 3 packs</option>
+                <option value="60">60 test USD · 12 packs</option>
+              </select>
+              <button id="claim-faucet" type="submit" disabled>Get test USD</button>
+            </div>
+          </form>
+          <p id="faucet-help">Connect a wallet to mint test USD. You’ll need tBNB to pay for gas.</p>
+          <div class="tools wallet-links">
+            <a id="gas-help" href="https://docs.bnbchain.org/bnb-smart-chain/developers/faucet/" target="_blank" rel="noopener">Get tBNB ↗</a>
+            <a id="faucet-contract" target="_blank" rel="noopener">USD contract ↗</a>
+          </div>
+        </div>
+        <div class="wallet-mint">
+          <h3>Founding packs</h3>
+          <p id="help">Checking the testnet round…</p>
+          <div class="tools" id="actions"></div>
+        </div>
+        <div class="wallet-feedback" id="wallet-feedback" hidden>
+          <output id="feedback" aria-live="polite"></output>
+          <a id="wallet-tx" target="_blank" rel="noopener" hidden>View transaction ↗</a>
+        </div>
+      </div>
       <div id="wallet-receipt" hidden>
         <div class="ignition-stage" id="wallet-stage">
           <div id="wallet-cards" class="cards pack-cards"></div>

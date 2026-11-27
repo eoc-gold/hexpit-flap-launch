@@ -1,8 +1,6 @@
-import { createPublicClient, createWalletClient, custom, http, formatEther, parseAbi, parseEventLogs, zeroAddress, isAddress } from 'viem';
-import {bscTestnet} from 'viem/chains';
-import {rpc,portal,usd,usdAbi,launchAbi} from '../scripts/network.mjs';
 import { fundingPanel, PACK_TARGET } from './round-progress.js';
 import { ignitionStage, reducedMotion } from './ignition/stage.js';
+import { initWallet } from './wallet.js';
 const el=id=>document.getElementById(id);
 const [publicRound,fork,catalog]=await Promise.all(['round','rehearsal','catalog'].map(async file=>{
   const r=await fetch('./'+file+'.json'); if (!r.ok) throw Error('Missing '+file); return r.json();
@@ -21,7 +19,6 @@ const openButton = el('open-pack');
 const resetButton = el('reset-round');
 const clearButton = el('clear-queue');
 const updateReplayFunding = fundingPanel(el('replay-funding'));
-const updateWalletFunding = fundingPanel(el('wallet-funding'));
 const explorer = hash => 'https://testnet.bscscan.com/tx/' + hash;
 const replayStage = ignitionStage(el('replay-stage'), el('cards'), catalog, openButton);
 
@@ -147,90 +144,4 @@ el('proof').textContent=live?'Confirmed on public BSC testnet. Open the transact
 if (live) for (const [name,key] of [['Factory','factory'],['Create launcher','create'],['Final mint + pool','openLast'],['Claim','claim1']]) {
   const a=document.createElement('a');a.href='https://testnet.bscscan.com/tx/'+data.steps[key].hash;a.textContent=name+' ↗';el('prooflinks').append(a);
 }
-const params=new URLSearchParams(location.search);
-const local=['127.0.0.1','localhost'].includes(location.hostname)&&params.has('fork');
-const round=local?fork:publicRound;
-const endpoint=local?'http://127.0.0.1:18797':rpc;
-const chain=bscTestnet;
-const client=createPublicClient({chain,transport:http(endpoint)});
-const address=params.get('launcher')||round.judgeLauncher||round.launcher;
-const msg=t=>{el('feedback').textContent=t;};
-el('wallet-replay').onclick = () => replayPack(lastWalletPack, false, msg);
-let wallet, account, walletStage;
-function action(label,fn){
-  const btn=document.createElement('button');btn.textContent=label;
-  btn.onclick=async()=>{
-    for(const b of el('actions').querySelectorAll('button')) b.disabled=true;
-    try{await fn();}catch(e){msg(e.shortMessage||e.message);}
-    finally{for(const b of el('actions').querySelectorAll('button')) b.disabled=false;}
-  };el('actions').append(btn);
-}
-const read=(a,abi,fn,args=[])=>client.readContract({address:a,abi,functionName:fn,args});
-async function transact(a,abi,fn,args){
-  const net=await wallet.getChainId();if(net!==97) throw Error('Select BSC testnet, chain 97.');
-  const config={account,address:a,abi,functionName:fn,args};
-  await client.simulateContract(config);
-  const estimate=await client.estimateContractGas(config);
-  const hash=await wallet.writeContract({...config,gas:estimate*13n/10n+60000n});
-  msg('Waiting for confirmation: '+hash);
-  const receipt=await client.waitForTransactionReceipt({hash});
-  if(receipt.status!=='success') throw Error('Transaction reverted. '+hash);
-  msg('Confirmed: '+hash);
-  if (fn === 'mintPacks') {
-    const logs = receipt.logs.filter(log => log.address.toLowerCase() === a.toLowerCase());
-    const pack = parseEventLogs({ abi: launchAbi, eventName: 'PackOpened', logs })[0]?.args;
-    if (pack) {
-      const poolOpened = parseEventLogs({ abi: launchAbi, eventName: 'PoolOpened', logs }).length > 0;
-      const game = formatEther(pack.game);
-      msg('Mint confirmed. '+pack.cards.map(id=>catalog[Number(id)-1].name).join(', ')+'. '+qty(game)+' GAME allocated. '+hash);
-      lastWalletPack = { ...pack, game, poolOpened, hash: local ? undefined : hash };
-      el('wallet-receipt').hidden = false;
-      walletStage ??= ignitionStage(el('wallet-stage'), el('wallet-cards'), catalog);
-      walletStage.charge(pack.cards);
-      if (!reducedMotion.matches) await new Promise(resolve => setTimeout(resolve, 680));
-      walletStage.show(pack.cards, true);
-      updateWalletFunding({ packs: Number(pack.number), poolOpened, payment: true });
-    }
-  }
-  await refresh().catch(error => console.error('Could not refresh launcher after confirmation', error));
-}
-async function refresh(){
-  el('actions').replaceChildren();
-  if(!address||!round.factory){el('help').textContent='The public testnet launcher is awaiting deployment. Explore every pack above using the recorded fork run.';return;}
-  if(!isAddress(address))throw Error('Invalid launcher address.');
-  const verifiedFactory=await read(portal,parseAbi(['function getLauncher(address) view returns (address)']),'getLauncher',[address]);
-  if(verifiedFactory.toLowerCase()!==round.factory.toLowerCase() || (await read(address,launchAbi,'USD')).toLowerCase()!==usd.toLowerCase()) throw Error('Unknown launcher or quote asset.');
-  const [chainSold,deadline,pool]=await Promise.all(['sold','deadline','pool'].map(fn=>read(address,launchAbi,fn)));
-  const closed = pool !== zeroAddress || Boolean(lastWalletPack?.poolOpened);
-  const expired = !closed && (await client.getBlock()).timestamp >= deadline;
-  const latestMint = lastWalletPack?.number ?? 0n;
-  const sold = chainSold > latestMint ? chainSold : latestMint;
-  updateWalletFunding({ packs: Number(sold), poolOpened: closed, expired, payment: sold === latestMint && sold > 0n });
-  el('help').textContent = closed
-    ? 'Connect the wallet that minted to check its GAME claim.'
-    : expired
-      ? 'The round ended before reaching its target.'
-      : 'Each pack costs 5 faucet USD. Your wallet confirms each transaction.';
-  if(!wallet){action('Connect wallet',async()=>{
-    if(!window.ethereum) throw Error('Open this page in an EVM wallet browser.');
-    wallet=createWalletClient({chain,transport:custom(window.ethereum)});
-    try{[account]=await wallet.requestAddresses();if(await wallet.getChainId()!==97) await wallet.switchChain({id:97});}
-    catch(e){wallet=null;throw e;}
-    window.ethereum.on?.('accountsChanged',()=>location.reload());window.ethereum.on?.('chainChanged',()=>location.reload());
-    await refresh();
-  });return;}
-  const [owed,paid]=await Promise.all(['allocation','paid'].map(fn=>read(address,launchAbi,fn,[account])));
-  if(closed){
-    if(owed>0n)action('Claim '+qty(formatEther(owed))+' GAME',()=>transact(address,launchAbi,'claim',[]));
-    else msg('This wallet has no outstanding GAME claim.');
-  }else if(expired){
-    if(paid>0n)action('Refund '+formatEther(paid)+' USD',()=>transact(address,launchAbi,'refund',[]));else msg('The round expired.');
-  }else{
-    const price=await read(address,launchAbi,'PACK_PRICE');
-    const [balance,allowance,start,end]=await Promise.all([read(usd,usdAbi,'balanceOf',[account]),read(usd,usdAbi,'allowance',[account,address]),read(address,launchAbi,'cumulative',[sold]),read(address,launchAbi,'cumulative',[sold+1n])]);
-    if(balance<price) action('Get 5 faucet USD',()=>transact(usd,usdAbi,'mint',[account,price]));
-    else if(allowance<price) action('Approve 5 USD',()=>transact(usd,usdAbi,'approve',[address,price]));
-    else action('Open pack · 5 USD',()=>transact(address,launchAbi,'mintPacks',[1n,end-start]));
-  }
-}
-refresh().catch(e=>msg(e.shortMessage||e.message));
+initWallet({ publicRound, fork, catalog, replayPack });
