@@ -9,6 +9,26 @@ const live=publicRound.status==='verified';
 const data=live?publicRound:fork;
 const qty=value=>Number(value).toLocaleString('en-US',{maximumFractionDigits:2});
 let index=0;
+const replayButton = el('replay-pack');
+const explorer = hash => 'https://testnet.bscscan.com/tx/' + hash;
+
+async function animatePack({ cards, game, player, hash }, replay) {
+  const { openPack } = await import('./pack-opening/index.js');
+  openPack({ ids: cards, catalog, game, player, explorerUrl: hash && explorer(hash), replay });
+}
+
+replayButton.onclick = async () => {
+  el('replay-error').textContent = '';
+  const pack = data.packs[index];
+  const hash = live ? data.steps[pack.number === 1 ? 'open1' : 'openLast'].hash : undefined;
+  try {
+    await animatePack({ ...pack, hash }, true);
+  } catch (error) {
+    el('replay-error').textContent = 'Could not load the pack opening. Please reload and try again.';
+    console.error(error);
+  }
+};
+replayButton.disabled = false;
 function show(i) {
   index=i;
   const p=data.packs[i];
@@ -59,11 +79,21 @@ async function transact(a,abi,fn,args){
   msg('Waiting for confirmation: '+hash);
   const receipt=await client.waitForTransactionReceipt({hash});
   if(receipt.status!=='success') throw Error('Transaction reverted. '+hash);
-  await refresh();msg('Confirmed: '+hash);
-  if(fn==='mintPacks'){
-    const pack=parseEventLogs({abi:launchAbi,eventName:'PackOpened',logs:receipt.logs})[0]?.args;
-    if(pack) msg('Mint confirmed. '+pack.cards.map(id=>catalog[Number(id)-1].name).join(', ')+'. '+qty(formatEther(pack.game))+' GAME allocated. '+hash);
+  msg('Confirmed: '+hash);
+  if (fn === 'mintPacks') {
+    const logs = receipt.logs.filter(log => log.address.toLowerCase() === a.toLowerCase());
+    const pack = parseEventLogs({ abi: launchAbi, eventName: 'PackOpened', logs })[0]?.args;
+    if (pack) {
+      const game = formatEther(pack.game);
+      msg('Mint confirmed. '+pack.cards.map(id=>catalog[Number(id)-1].name).join(', ')+'. '+qty(game)+' GAME allocated. '+hash);
+      try {
+        await animatePack({ ...pack, game, hash: local ? undefined : hash }, false);
+      } catch (error) {
+        console.error('Could not load the pack opening for confirmed mint', hash, error);
+      }
+    }
   }
+  await refresh().catch(error => console.error('Could not refresh launcher after confirmation', error));
 }
 async function refresh(){
   el('actions').replaceChildren();

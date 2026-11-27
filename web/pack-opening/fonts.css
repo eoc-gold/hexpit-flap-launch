@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'Cinzel';
+  src: url('../pack-assets/fonts/Cinzel-600-normal.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Cinzel';
+  src: url('../pack-assets/fonts/Cinzel-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Cinzel';
+  src: url('../pack-assets/fonts/Cinzel-800-normal.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Cinzel';
+  src: url('../pack-assets/fonts/Cinzel-900-normal.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../pack-assets/fonts/Rajdhani-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../pack-assets/fonts/Rajdhani-500-normal.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../pack-assets/fonts/Rajdhani-600-normal.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../pack-assets/fonts/Rajdhani-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}

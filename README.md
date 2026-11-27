@@ -12,10 +12,12 @@ DEXPit is the card game. HexPit is the launcher prototype in this repository. A 
 
 ## Judge walkthrough
 
-1. Open the demo. Step through any of the twelve opening receipts. Each shows the five card IDs from its on-chain event, the player's exact GAME allocation and the USD raised so far. The fifth slot always draws Rare or better.
+1. Open the demo. Step through any of the twelve opening receipts and choose **Replay pack opening** to break the seal and flip the five cards with the original DEXPit effects. Each shows the five card IDs from its on-chain event, the player's exact GAME allocation and the USD raised so far. The fifth slot always draws Rare or better.
 2. Choose **View final mint**. The launch produced 1,000,000 GAME. The pool received 500,000 GAME and 60 test USD. The launcher received the remaining 500,000 for pack buyers. All LP units went to the burn address except the pair's 1,000 base units of minimum liquidity at the zero address. [Transaction](https://testnet.bscscan.com/tx/0xeaaef28b04d44b211df6736f33141fa0c108a7d39abed5dd21a617aa6da34774)
 3. Inspect the claim. A single test wallet purchased the demonstration round and claimed all 500,000 GAME. The two-wallet fork rehearsal independently reconciles the split between two buyers. [Public claim](https://testnet.bscscan.com/tx/0x239484d974c6d92f2885704727040c0f403378e6919c8aedb1c3a8d11ae3424e) · [Public receipts](web/round.json) · [Fork receipts](web/rehearsal.json)
 4. To participate, open **Use a wallet**. A second round accepts judge mints until it fills or the seven-day window expires. The wallet signs the faucet USD mint if needed, an exact 5 USD approval, then the pack mint. The USD faucet requires tBNB for gas. [Judge round creation](https://testnet.bscscan.com/tx/0x27aed947d0e2d1dd361c150680f6ddbb6cf364edc6147770fdcfff2aac08be55)
+
+The interactive replay and confirmed wallet mints use the original DEXPit pack-opening components, sprites, and sound cues, adapted from [the DEXPit source](https://github.com/eoc-gold/dexpit/tree/3a8703ae53990c84eb5dc787e4452c8a3e0cb1e0/Website/src/lib/components/economy).
 
 ## Verified BSC testnet contracts
 
